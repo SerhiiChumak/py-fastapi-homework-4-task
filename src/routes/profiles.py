@@ -33,7 +33,7 @@ async def create_profile(
     s3_client: S3StorageInterface = Depends(get_s3_storage_client)
 ):
     payload = auth_manager.decode_access_token(token)
-    current_user_id = int(payload.get("sub"))
+    current_user_id = int(payload.get("user_id"))
 
     current_user_query = await db.execute(
         select(UserModel).where(UserModel.id == current_user_id)
@@ -54,7 +54,7 @@ async def create_profile(
     if not target_user or not target_user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found or not active."
+            detail="Token has expired."
         )
 
     profile_query = await db.execute(
