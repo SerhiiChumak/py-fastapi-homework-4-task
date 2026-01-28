@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, field_validator
 from datetime import date
 from typing import Optional
 from database.models.accounts import GenderEnum
-from validation.profile import validate_name, validate_gender, validate_birth_date
+from validation.profile import validate_name, validate_gender, validate_birth_date, validate_image
 
 class ProfileCreateSchema(BaseModel):
     first_name: str = Field(..., max_length=100)
@@ -26,6 +26,11 @@ class ProfileCreateSchema(BaseModel):
     @classmethod
     def check_birth_date(cls, v):
         return validate_birth_date(v)
+
+    @field_validator("date_of_birth")
+    @classmethod
+    def check_image(cls, v):
+        return validate_image(v)
 
     @field_validator("info")
     @classmethod
