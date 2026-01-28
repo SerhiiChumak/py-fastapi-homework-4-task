@@ -4,6 +4,7 @@ from typing import Optional
 from database.models.accounts import GenderEnum
 from validation.profile import validate_name, validate_gender, validate_birth_date, validate_image
 
+
 class ProfileCreateSchema(BaseModel):
     first_name: str = Field(..., max_length=100)
     last_name: str = Field(..., max_length=100)

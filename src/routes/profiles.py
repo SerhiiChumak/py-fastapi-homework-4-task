@@ -13,6 +13,7 @@ from security.http import get_token
 
 router = APIRouter(prefix="/users", tags=["Profiles"])
 
+
 @router.post(
     "/{user_id}/profile/",
     response_model=ProfileResponseSchema,
@@ -31,20 +32,6 @@ async def create_profile(
     auth_manager: JWTAuthManagerInterface = Depends(get_jwt_auth_manager),
     s3_client: S3StorageInterface = Depends(get_s3_storage_client)
 ):
-    try:
-        profile_data = ProfileCreateSchema(
-            first_name=first_name,
-            last_name=last_name,
-            gender=gender,
-            date_of_birth=date_of_birth,
-            info=info
-        )
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
-
     payload = auth_manager.decode_access_token(token)
     current_user_id = int(payload.get("sub"))
 
